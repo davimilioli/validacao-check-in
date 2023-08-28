@@ -1,6 +1,6 @@
 function initialized() {
     addNumbers();
-    resultEstimated();
+/*     resultEstimated(); */
     addEventListener('change', resultEstimated);
     clear();
 
@@ -14,7 +14,10 @@ initialized()
 
 const dataChegada = document.querySelector('#data-chegada');
 
-const enviarForm = document.querySelector('#enviar');
+const salvar = document.querySelector('#salvar');
+const enviarForm = document.querySelector('#enviarForm');
+const modal = document.querySelector('#modal');
+console.log(confirForm)
 
 form.addEventListener('submit', (e) => {
     e.preventDefault()
