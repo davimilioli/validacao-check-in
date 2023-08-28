@@ -12,11 +12,11 @@ initialized()
 
 
 
-const dataChegada = document.querySelector('#data-chegada');
 
-const salvar = document.querySelector('#salvar');
+
+
 const enviarForm = document.querySelector('#enviarForm');
-const modal = document.querySelector('#modal');
+
 console.log(confirForm)
 
 form.addEventListener('submit', (e) => {
@@ -32,11 +32,10 @@ function validationName() {
 function validationSex() {
     const sexo = document.querySelector('#sexo');
     const sexoValue = sexo.options[sexo.selectedIndex].value;
-    let comSucesso = sexoValue !== '' ? sexoValue : '';
-    return comSucesso;
+    return sexoValue;
 }
 
-function validationDate() {
+function validationYear() {
     const idade = document.querySelector('#idade');
     const idadeValue = idade.value.slice(0, 4);
     const currentDate = new Date();
@@ -49,10 +48,15 @@ function validationEmail() {
     const email = document.querySelector('#email');
     const emailValue = email.value;
     const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i;
-    let comSucesso = emailRegex.test(emailValue) ? emailRegex.test(emailValue) : false;
+    let comSucesso = emailRegex.test(emailValue) ? email.value : false;
     return comSucesso;
 }
 
+function validationArrival(){
+    const dataChegada = document.querySelector('#data-chegada');
+    const dataValue = dataChegada.value;
+    return dataValue;
+}
 
 function addNumbers() {
     const numbers = document.querySelectorAll('[data-numbers-option]')
@@ -69,6 +73,18 @@ function addNumbers() {
     });
 
     return numbers;
+}
+
+function validateNight(){
+    const numberNight = document.querySelector('#numero-noites');
+    const nightValue = numberNight.options[numberNight.selectedIndex].value;
+    return nightValue;
+}
+
+function validateGuests(){
+    const numberGuests = document.querySelector('#numero-hospedes');
+    const guestsValue = numberGuests.options[numberGuests.selectedIndex].value;
+    return guestsValue;
 }
 
 function resultEstimated() {
@@ -103,8 +119,7 @@ function resultEstimated() {
 
     totalEstimado.innerHTML = template;
 
-    return totalEstimado;
-
+    return total;
 }
 
 function message() {
@@ -116,9 +131,9 @@ function message() {
 function newsletter() {
     const newsLetter = document.querySelector('#newsletter');
     const check = newsLetter.checked ? 'Sim' : 'Não';
-    console.log(check)
     return check;
 }
+
 
 function clear() {
     const form = document.querySelector('#form');
@@ -133,7 +148,34 @@ function clear() {
             message.value = '';
         })
     });
-
-
-
 }
+
+const salvar = document.querySelector('#salvar');
+salvar.addEventListener('click', () => {
+    saveForm()
+})
+
+
+function saveForm(){
+    const vName = validationName();
+    const vSexo = validationSex();
+    const vDate = validationYear();
+    const vEmail = validationEmail();
+    const vNight = validateNight();
+    const vGuests = validateGuests();
+    const vEstimated = resultEstimated();
+    const vMessage = message();
+    const vNewsLetter = newsletter();
+    const vArrival = validationArrival();
+    if(vName && vSexo && vDate && vEmail && vNight && vGuests && vEstimated && vMessage && vNewsLetter && vArrival){
+        console.log('sim');
+    } else {
+        console.log('Dados incorretos!!');
+    }
+}
+
+function openModal(){
+    const modal = document.querySelector('#modal');
+}
+
+openModal()
