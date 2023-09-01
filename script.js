@@ -1,28 +1,3 @@
-function initialized() {
-    addNumbers();
-/*     resultEstimated(); */
-    addEventListener('change', resultEstimated);
-    clear();
-
-
-    /* console.log('script.js iniciado'); */
-}
-
-initialized()
-
-
-
-
-
-
-const enviarForm = document.querySelector('#enviarForm');
-
-console.log(confirForm)
-
-form.addEventListener('submit', (e) => {
-    e.preventDefault()
-})
-
 function validationName() {
     const nome = document.querySelector('#nome');
     let comSucesso = nome.value !== '' ? nome.value : '';
@@ -52,7 +27,7 @@ function validationEmail() {
     return comSucesso;
 }
 
-function validationArrival(){
+function validationArrival() {
     const dataChegada = document.querySelector('#data-chegada');
     const dataValue = dataChegada.value;
     return dataValue;
@@ -75,13 +50,15 @@ function addNumbers() {
     return numbers;
 }
 
-function validateNight(){
+addNumbers();
+
+function validateNight() {
     const numberNight = document.querySelector('#numero-noites');
     const nightValue = numberNight.options[numberNight.selectedIndex].value;
     return nightValue;
 }
 
-function validateGuests(){
+function validateGuests() {
     const numberGuests = document.querySelector('#numero-hospedes');
     const guestsValue = numberGuests.options[numberGuests.selectedIndex].value;
     return guestsValue;
@@ -94,7 +71,6 @@ function resultEstimated() {
     const noitesCount = noites.options[noites.selectedIndex].value;
     const hospedesCount = hospedes.options[hospedes.selectedIndex].value;
 
-
     const valorNoite = 1000 * noitesCount;
     const valorHospede = 500 * hospedesCount;
 
@@ -102,22 +78,6 @@ function resultEstimated() {
         noite: [valorNoite, noitesCount],
         hospede: [valorHospede, hospedesCount],
     };
-
-    const srtNoite = total.noite[1] == 1 ? 'Noite' : 'Noites';
-    const srtHospede = total.hospede[1] == 1 ? 'Hóspede' : 'Hóspedes';
-
-    const template = `
-        <div class="valor-total">
-            <p>${srtNoite}: ${total.noite[1]}</p>
-            <p>Valor: ${total.noite[0]}</p>
-        </div>
-        <div class="valor-total">
-            <p>${srtHospede}: ${total.hospede[1]}</p>
-            <p>Valor: ${total.hospede[0]}</p>
-        </div>
-    `
-
-    totalEstimado.innerHTML = template;
 
     return total;
 }
@@ -134,11 +94,10 @@ function newsletter() {
     return check;
 }
 
-
 function clear() {
     const form = document.querySelector('#form');
     const limparForm = document.querySelector('#limpar');
-    const select = form.querySelectorAll('select');
+    //const select = form.querySelectorAll('select');
     limparForm.addEventListener('click', () => {
         const inputs = form.querySelectorAll('input');
         const message = form.querySelector('textarea')
@@ -150,13 +109,9 @@ function clear() {
     });
 }
 
-const salvar = document.querySelector('#salvar');
-salvar.addEventListener('click', () => {
-    saveForm()
-})
+clear()
 
-
-function saveForm(){
+function saveForm() {
     const vName = validationName();
     const vSexo = validationSex();
     const vDate = validationYear();
@@ -167,15 +122,95 @@ function saveForm(){
     const vMessage = message();
     const vNewsLetter = newsletter();
     const vArrival = validationArrival();
-    if(vName && vSexo && vDate && vEmail && vNight && vGuests && vEstimated && vMessage && vNewsLetter && vArrival){
-        console.log('sim');
-    } else {
-        console.log('Dados incorretos!!');
+    const valores = {};
+
+    if (vName) {
+        valores.nome = vName;
+    }
+
+    if (vSexo) {
+        valores.sexo = vSexo.charAt(0).toUpperCase() + vSexo.slice(1);
+    }
+
+    if (vDate) {
+        valores.data = vDate;
+    }
+
+    if (vEmail) {
+        valores.email = vEmail;
+    }
+
+    if (vNight) {
+        valores.noite = vNight;
+    }
+
+    if (vGuests) {
+        valores.convidados = vGuests;
+    }
+
+    if (vEstimated) {
+        valores.estimated = vEstimated;
+    }
+
+    if (vMessage) {
+        valores.mensagem = vMessage;
+    }
+
+    if (vNewsLetter) {
+        valores.newsletter = vNewsLetter;
+    }
+
+    if (vArrival) {
+        valores.chegada = vArrival;
+    }
+
+    const validates = (vName && vSexo && vDate && vEmail && vNight && vGuests && vEstimated && vArrival);
+    console.log(vEstimated)
+    return {
+        valores: valores,
+        validates: validates ? true : false,
     }
 }
 
-function openModal(){
-    const modal = document.querySelector('#modal');
-}
+const salvar = document.querySelector('#salvar');
+salvar.addEventListener('click', () => {
+    if (saveForm().validates) {
+        openModal();
+    }
+})
 
-openModal()
+function openModal() {
+    const modal = document.querySelector('#modal');
+    modal.classList.add('active');
+
+    const dateForm = saveForm().valores;
+
+    const total = dateForm.estimated.noite[0] + dateForm.estimated.hospede[0];
+
+    const contentModal = `    
+    <form action="/action_page.php" method="post">        
+        <div>
+            Nome: <input type="text" name="nome" value="${dateForm.nome}">
+            Sexo: <input type="text" name="sexo" value="${dateForm.sexo}">
+            Idade: <input type="text" name="idade" value="${dateForm.data}">
+            Email: <input type="text" name="email" value="${dateForm.email}">
+            Data de chegada: <input type="text" name="chegada" value="${dateForm.chegada}">
+            Numero de Noites: <input type="text" name="noite" value="${dateForm.noite}">
+            Numero de Hospedes: <input type="text" name="convidados" value="${dateForm.convidados}">
+            Mensagem: <input type="text" name="mensagem" value="${dateForm.mensagem ? dateForm.mensagem : ''}">
+            Total Estimado: <input type="text" name="total" value="${total}">
+            Aceito receber noticias: <input type="text" name="newsletter" value="${dateForm.newsletter}">
+        </div>
+        <div>
+            <button id="enviarForm" type="submit">Confirmar</button>
+            <button id="editForm" type="button">Editar dados</button>
+        </div>
+    </form>
+    `;
+
+    modal.innerHTML = contentModal;
+    const editForm = document.querySelector('#editForm');
+    editForm.addEventListener('click', () => {
+        modal.classList.remove('active');
+    });
+}

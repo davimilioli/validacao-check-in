@@ -1,19 +1,24 @@
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#form{
+body {
+    background-color: #000;
+    color: #FFF;
+}
+
+#form {
     position: relative;
 }
 
-#modal{
+#modal {
     display: none;
 }
 
-#modal.active{
+#modal.active {
     display: block;
     position: fixed;
     top: 40%;
